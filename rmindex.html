@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CodeNest</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background: #f5f5f5;
+        }
+
+
+        /* =========================================
+           SMALL UNIQUE CURSOR
+        ========================================= */
+
+        .fun-cursor {
+            position: fixed;
+
+            width: 16px;
+            height: 16px;
+
+            pointer-events: none;
+
+            z-index: 99999;
+
+            transform: translate(-50%, -50%);
+        }
+
+
+        .cursor-face {
+            position: relative;
+
+            width: 14px;
+            height: 14px;
+
+            background: #00d9ff;
+
+            border-radius: 50%;
+
+            border: 1px solid white;
+
+            box-shadow:
+                0 0 0 1px #020617,
+                0 0 8px rgba(0, 217, 255, 0.65);
+
+            transition: 0.18s ease;
+        }
+
+
+        .eye {
+            position: absolute;
+
+            width: 2px;
+            height: 3px;
+
+            background: #020617;
+
+            border-radius: 50%;
+
+            top: 3px;
+        }
+
+
+        .eye.left {
+            left: 3px;
+        }
+
+
+        .eye.right {
+            right: 3px;
+        }
+
+
+        .mouth {
+            position: absolute;
+
+            width: 6px;
+            height: 3px;
+
+            border-bottom:
+                1px solid #020617;
+
+            border-radius:
+                0 0 8px 8px;
+
+            bottom: 2px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+        }
+
+
+        .cursor-dot {
+            position: absolute;
+
+            width: 3px;
+            height: 3px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            top: -4px;
+            right: -4px;
+
+            animation:
+                cursorFloat 1.2s infinite ease-in-out;
+        }
+
+
+        @keyframes cursorFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translate(2px, -3px);
+                opacity: 0.4;
+            }
+        }
+
+
+        .fun-cursor.hover .cursor-face {
+
+            background: #ffd43b;
+
+            transform:
+                scale(1.18)
+                rotate(8deg);
+        }
+
+
+        .fun-cursor.click .cursor-face {
+
+            transform:
+                scale(0.7)
+                rotate(-8deg);
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+
+            width: 100%;
+
+            height: 72px;
+
+            background:
+                #030712;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0 60px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            border-bottom:
+                1px solid
+                rgba(0, 217, 255, 0.08);
+        }
+
+
+        /* =========================================
+           LOGO
+        ========================================= */
+
+        .brand-logo {
+
+            width: 120px;
+
+            height: 68px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-decoration: none;
+
+            overflow: hidden;
+
+            flex-shrink: 0;
+        }
+
+
+        .brand-logo img {
+
+            width: 108px;
+
+            height: 108px;
+
+            object-fit: contain;
+
+            display: block;
+
+            /*
+               Logo-এর dark background
+               header-এর সাথে blend করার জন্য
+            */
+
+            mix-blend-mode: screen;
+
+            filter:
+                brightness(1.08)
+                contrast(1.06)
+                drop-shadow(
+                    0 0 6px
+                    rgba(0, 217, 255, 0.35)
+                );
+
+            transition:
+                transform 0.3s ease,
+                filter 0.3s ease;
+        }
+
+
+        .brand-logo:hover img {
+
+            transform:
+                scale(1.07);
+
+            filter:
+                brightness(1.15)
+                contrast(1.08)
+                drop-shadow(
+                    0 0 12px
+                    rgba(0, 217, 255, 0.65)
+                );
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        nav {
+
+            display: flex;
+
+            align-items: center;
+        }
+
+
+        nav a {
+
+            color: white;
+
+            text-decoration: none;
+
+            margin-left: 30px;
+
+            font-size: 16px;
+
+            transition: 0.3s;
+        }
+
+
+        nav a:hover {
+
+            color: #00d9ff;
+        }
+
+
+        /* =========================================
+           LOGIN BUTTON
+        ========================================= */
+
+        .login-btn {
+
+            margin-left: 25px;
+
+            padding:
+                9px 18px;
+
+            border:
+                1px solid
+                #00d9ff;
+
+            border-radius:
+                25px;
+
+            background:
+                transparent;
+
+            color:
+                #00d9ff;
+
+            font-size:
+                15px;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.3s;
+        }
+
+
+        .login-btn:hover {
+
+            background:
+                #00d9ff;
+
+            color:
+                #020617;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 0 18px
+                rgba(0, 217, 255, 0.35);
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+
+            height:
+                calc(100vh - 72px);
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+        }
+
+
+        .hero > img {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
+
+            filter:
+                brightness(0.62);
+
+            /*
+               IMPORTANT:
+               No movement / no zoom
+            */
+
+            transform:
+                none;
+
+            transition:
+                none;
+        }
+
+
+        .hero-content {
+
+            position:
+                absolute;
+
+            top:
+                50%;
+
+            left:
+                50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            width:
+                90%;
+
+            text-align:
+                center;
+
+            color:
+                white;
+        }
+
+
+        .hero-content h1 {
+
+            font-size:
+                55px;
+
+            margin-bottom:
+                15px;
+
+            text-shadow:
+                0 0 20px
+                rgba(0, 217, 255, 0.4);
+        }
+
+
+        .hero-content p {
+
+            font-size:
+                20px;
+
+            margin-bottom:
+                25px;
+        }
+
+
+        .btn {
+
+            display:
+                inline-block;
+
+            padding:
+                12px 25px;
+
+            background:
+                #00bcd4;
+
+            color:
+                white;
+
+            text-decoration:
+                none;
+
+            border-radius:
+                6px;
+
+            transition:
+                0.3s;
+        }
+
+
+        .btn:hover {
+
+            background:
+                #0097a7;
+
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 188, 212, 0.35);
+        }
+
+
+        /* =========================================
+           ABOUT
+        ========================================= */
+
+        .about {
+
+            position:
+                relative;
+
+            padding:
+                100px 60px;
+
+            text-align:
+                center;
+
+            color:
+                white;
+
+            overflow:
+                hidden;
+        }
+
+
+        .about::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            top:
+                -20px;
+
+            left:
+                -20px;
+
+            width:
+                calc(100% + 40px);
+
+            height:
+                calc(100% + 40px);
+
+            background:
+                url("images.jpg")
+                center / cover
+                no-repeat;
+
+            filter:
+                blur(8px);
+
+            z-index:
+                0;
+        }
+
+
+        .about::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            background:
+                rgba(0, 0, 0, 0.52);
+
+            z-index:
+                1;
+        }
+
+
+        .about h2,
+        .about p {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+        }
+
+
+        .about h2 {
+
+            font-size:
+                35px;
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .about p {
+
+            max-width:
+                800px;
+
+            margin:
+                auto;
+
+            font-size:
+                18px;
+
+            line-height:
+                1.7;
+        }
+
+
+        /* =========================================
+           SERVICES
+        ========================================= */
+
+        .services {
+
+            padding:
+                80px 60px;
+
+            background:
+                #f5f5f5;
+
+            text-align:
+                center;
+        }
+
+
+        .services h2 {
+
+            font-size:
+                35px;
+
+            margin-bottom:
+                40px;
+        }
+
+
+        .service-box {
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+            gap:
+                25px;
+
+            flex-wrap:
+                wrap;
+        }
+
+
+        .card {
+
+            width:
+                250px;
+
+            min-height:
+                210px;
+
+            padding:
+                35px 25px;
+
+            background:
+                white;
+
+            border-radius:
+                15px;
+
+            box-shadow:
+                0 5px 15px
+                rgba(0, 0, 0, 0.1);
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            transition:
+                0.4s;
+        }
+
+
+        .card::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            top:
+                0;
+
+            left:
+                0;
+
+            width:
+                100%;
+
+            height:
+                4px;
+
+            background:
+                #00bcd4;
+
+            transform:
+                scaleX(0);
+
+            transition:
+                0.4s;
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-12px)
+                rotate(1deg);
+
+            box-shadow:
+                0 15px 35px
+                rgba(0, 0, 0, 0.15);
+        }
+
+
+        .card:hover::before {
+
+            transform:
+                scaleX(1);
+        }
+
+
+        .service-icon {
+
+            font-size:
+                40px;
+
+            color:
+                #00bcd4;
+
+            margin-bottom:
+                20px;
+
+            transition:
+                0.3s;
+        }
+
+
+        .card:hover .service-icon {
+
+            transform:
+                rotate(-8deg)
+                scale(1.12);
+        }
+
+
+        .card h3 {
+
+            margin-bottom:
+                15px;
+        }
+
+
+        .card p {
+
+            color:
+                #555;
+
+            line-height:
+                1.6;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            background:
+                #030712;
+
+            color:
+                white;
+
+            text-align:
+                center;
+
+            padding:
+                45px 20px 25px;
+        }
+
+
+        .footer-title {
+
+            font-size:
+                28px;
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .footer-title span {
+
+            color:
+                #00d9ff;
+        }
+
+
+        .social-icons {
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+            gap:
+                15px;
+
+            margin-bottom:
+                25px;
+        }
+
+
+        .social-icons a {
+
+            width:
+                50px;
+
+            height:
+                50px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                50%;
+
+            background:
+                white;
+
+            color:
+                #030712;
+
+            text-decoration:
+                none;
+
+            font-size:
+                21px;
+
+            transition:
+                0.3s;
+        }
+
+
+        .social-icons a:hover {
+
+            background:
+                #00d9ff;
+
+            color:
+                #030712;
+
+            transform:
+                translateY(-7px)
+                rotate(7deg);
+        }
+
+
+        .copyright {
+
+            color:
+                #8b95a7;
+
+            font-size:
+                14px;
+        }
+
+
+        /* =========================================
+           LOGIN BACKDROP
+        ========================================= */
+
+        .login-overlay {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            background:
+                rgba(2, 6, 23, 0.68);
+
+            backdrop-filter:
+                blur(5px);
+
+            opacity:
+                0;
+
+            visibility:
+                hidden;
+
+            transition:
+                0.3s ease;
+
+            z-index:
+                2000;
+        }
+
+
+        .login-overlay.active {
+
+            opacity:
+                1;
+
+            visibility:
+                visible;
+        }
+
+
+        /* =========================================
+           LOGIN BOX
+           SMALL + UNIQUE
+        ========================================= */
+
+        .login-panel {
+
+            position:
+                fixed;
+
+            width:
+                330px;
+
+            max-width:
+                calc(100% - 30px);
+
+            padding:
+                28px 25px;
+
+            left:
+                50%;
+
+            /*
+               Start BELOW the screen
+            */
+
+            top:
+                100%;
+
+            transform:
+                translate(-50%, 0)
+                scale(0.94);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #0f172a,
+                    #111827
+                );
+
+            border:
+                1px solid
+                rgba(0, 217, 255, 0.22);
+
+            border-radius:
+                20px;
+
+            color:
+                white;
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.55),
+
+                0 0 30px
+                rgba(0, 217, 255, 0.08);
+
+            opacity:
+                0;
+
+            visibility:
+                hidden;
+
+            z-index:
+                2100;
+
+            /*
+               Bottom -> Center animation
+            */
+
+            transition:
+                top 0.5s
+                cubic-bezier(.22, 1, .36, 1),
+
+                transform 0.5s
+                cubic-bezier(.22, 1, .36, 1),
+
+                opacity 0.35s ease;
+        }
+
+
+        /*
+           OPEN STATE
+        */
+
+        .login-panel.active {
+
+            top:
+                50%;
+
+            transform:
+                translate(-50%, -50%)
+                scale(1);
+
+            opacity:
+                1;
+
+            visibility:
+                visible;
+        }
+
+
+        /* =========================================
+           CLOSE BUTTON
+        ========================================= */
+
+        .close-login {
+
+            position:
+                absolute;
+
+            top:
+                12px;
+
+            right:
+                12px;
+
+            width:
+                30px;
+
+            height:
+                30px;
+
+            border:
+                none;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            color:
+                #aeb8c8;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.3s;
+        }
+
+
+        .close-login:hover {
+
+            background:
+                #00d9ff;
+
+            color:
+                #020617;
+
+            transform:
+                rotate(90deg);
+        }
+
+
+        /* =========================================
+           LOGIN HEADER
+        ========================================= */
+
+        .login-header {
+
+            text-align:
+                center;
+
+            margin-bottom:
+                22px;
+        }
+
+
+        .login-icon {
+
+            width:
+                50px;
+
+            height:
+                50px;
+
+            margin:
+                0 auto 12px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                15px;
+
+            color:
+                #00d9ff;
+
+            background:
+                rgba(0, 217, 255, 0.1);
+
+            font-size:
+                21px;
+
+            border:
+                1px solid
+                rgba(0, 217, 255, 0.15);
+        }
+
+
+        .login-header h2 {
+
+            font-size:
+                23px;
+
+            margin-bottom:
+                5px;
+        }
+
+
+        .login-header p {
+
+            color:
+                #8d99ab;
+
+            font-size:
+                12px;
+        }
+
+
+        /* =========================================
+           INPUT
+        ========================================= */
+
+        .input-box {
+
+            margin-bottom:
+                15px;
+        }
+
+
+        .input-box label {
+
+            display:
+                block;
+
+            margin-bottom:
+                6px;
+
+            font-size:
+                12px;
+
+            color:
+                #cbd5e1;
+        }
+
+
+        .input-wrapper {
+
+            position:
+                relative;
+        }
+
+
+        .input-wrapper i {
+
+            position:
+                absolute;
+
+            left:
+                13px;
+
+            top:
+                50%;
+
+            transform:
+                translateY(-50%);
+
+            color:
+                #00d9ff;
+
+            font-size:
+                13px;
+        }
+
+
+        .input-wrapper input {
+
+            width:
+                100%;
+
+            height:
+                42px;
+
+            padding:
+                0 12px 0 38px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.1);
+
+            border-radius:
+                9px;
+
+            outline:
+                none;
+
+            background:
+                rgba(255, 255, 255, 0.055);
+
+            color:
+                white;
+
+            font-size:
+                13px;
+
+            transition:
+                0.3s;
+        }
+
+
+        .input-wrapper input::placeholder {
+
+            color:
+                #697589;
+        }
+
+
+        .input-wrapper input:focus {
+
+            border-color:
+                #00d9ff;
+
+            box-shadow:
+                0 0 12px
+                rgba(0, 217, 255, 0.1);
+        }
+
+
+        /* =========================================
+           LOGIN SUBMIT
+        ========================================= */
+
+        .login-submit {
+
+            width:
+                100%;
+
+            height:
+                42px;
+
+            border:
+                none;
+
+            border-radius:
+                9px;
+
+            background:
+                #00d9ff;
+
+            color:
+                #020617;
+
+            font-size:
+                14px;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
+            margin-top:
+                3px;
+
+            transition:
+                0.3s;
+        }
+
+
+        .login-submit:hover {
+
+            background:
+                #38e8ff;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(0, 217, 255, 0.2);
+        }
+
+
+        .login-bottom {
+
+            text-align:
+                center;
+
+            margin-top:
+                16px;
+
+            font-size:
+                11px;
+
+            color:
+                #697589;
+        }
+
+
+        .login-bottom span {
+
+            color:
+                #00d9ff;
+
+            cursor:
+                pointer;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            header {
+
+                padding:
+                    0 25px;
+            }
+
+
+            nav a {
+
+                margin-left:
+                    15px;
+            }
+
+
+            .hero-content h1 {
+
+                font-size:
+                    42px;
+            }
+        }
+
+
+        @media (max-width: 650px) {
+
+            .fun-cursor {
+
+                display:
+                    none;
+            }
+
+
+            header {
+
+                height:
+                    auto;
+
+                min-height:
+                    70px;
+
+                padding:
+                    8px 15px;
+
+                flex-wrap:
+                    wrap;
+
+                gap:
+                    5px;
+            }
+
+
+            .brand-logo {
+
+                width:
+                    100px;
+
+                height:
+                    58px;
+            }
+
+
+            .brand-logo img {
+
+                width:
+                    90px;
+
+                height:
+                    90px;
+            }
+
+
+            nav {
+
+                width:
+                    100%;
+
+                justify-content:
+                    center;
+
+                flex-wrap:
+                    wrap;
+
+                gap:
+                    10px;
+            }
+
+
+            nav a {
+
+                margin-left:
+                    0;
+
+                font-size:
+                    13px;
+            }
+
+
+            .login-btn {
+
+                margin-left:
+                    0;
+
+                padding:
+                    7px 14px;
+            }
+
+
+            .hero {
+
+                height:
+                    calc(100vh - 125px);
+            }
+
+
+            .hero-content h1 {
+
+                font-size:
+                    34px;
+            }
+
+
+            .hero-content p {
+
+                font-size:
+                    17px;
+            }
+
+
+            .about {
+
+                padding:
+                    70px 25px;
+            }
+
+
+            .services {
+
+                padding:
+                    70px 20px;
+            }
+
+
+            .card {
+
+                width:
+                    100%;
+
+                max-width:
+                    330px;
+            }
+
+
+            .login-panel {
+
+                width:
+                    310px;
+
+                padding:
+                    25px 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         FUN CURSOR
+    ========================================= -->
+
+    <div
+        class="fun-cursor"
+        id="funCursor">
+
+        <div class="cursor-face">
+
+            <span class="eye left"></span>
+
+            <span class="eye right"></span>
+
+            <span class="mouth"></span>
+
+        </div>
+
+        <span class="cursor-dot"></span>
+
+    </div>
+
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <header>
+
+
+        <!-- LOGO -->
+
+        <a
+            href="#"
+            class="brand-logo">
+
+            <img
+                src="codenest.png"
+                alt="CodeNest Logo">
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav>
+
+            <a href="#">
+                Home
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#services">
+                Services
+            </a>
+
+            <button
+                class="login-btn"
+                onclick="openLogin()">
+
+                <i class="fa-solid fa-user"></i>
+
+                Login
+
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================================
+         HERO
+    ========================================= -->
+
+    <section class="hero">
+
+
+        <img
+            src="images.jpg"
+            alt="Background">
+
+
+        <div class="hero-content">
+
+            <h1>
+                Welcome to CodeNest
+            </h1>
+
+            <p>
+                I am learning Web Development
+            </p>
+
+            <a
+                href="#about"
+                class="btn">
+
+                Explore More
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         ABOUT
+    ========================================= -->
+
+    <section
+        class="about"
+        id="about">
+
+        <h2>
+            About Me
+        </h2>
+
+        <p>
+
+            Hello! My name is Rishad.
+            I am learning HTML, CSS and Web Development.
+            This is my first website.
+
+        </p>
+
+    </section>
+
+
+    <!-- =========================================
+         SERVICES
+    ========================================= -->
+
+    <section
+        class="services"
+        id="services">
+
+        <h2>
+            My Services
+        </h2>
+
+
+        <div class="service-box">
+
+
+            <div class="card">
+
+                <div class="service-icon">
+
+                    <i class="fa-solid fa-pen-ruler"></i>
+
+                </div>
+
+                <h3>
+                    Web Design
+                </h3>
+
+                <p>
+
+                    I can create beautiful,
+                    modern and responsive
+                    website designs.
+
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="service-icon">
+
+                    <i class="fa-brands fa-html5"></i>
+
+                </div>
+
+                <h3>
+                    HTML Development
+                </h3>
+
+                <p>
+
+                    I create clean and
+                    structured HTML
+                    web pages.
+
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="service-icon">
+
+                    <i class="fa-brands fa-css3-alt"></i>
+
+                </div>
+
+                <h3>
+                    CSS Development
+                </h3>
+
+                <p>
+
+                    I create attractive layouts,
+                    animations and responsive
+                    designs using CSS.
+
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="service-icon">
+
+                    <i class="fa-solid fa-code"></i>
+
+                </div>
+
+                <h3>
+                    Development
+                </h3>
+
+                <p>
+
+                    I am learning modern
+                    web development and
+                    building creative websites.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <footer>
+
+
+        <h2 class="footer-title">
+
+            <span>Contact</span> Me
+
+        </h2>
+
+
+        <div class="social-icons">
+
+
+            <a
+                href="mailto:rishadmondol66@gmail.com"
+                title="Email">
+
+                <i class="fa-solid fa-envelope"></i>
+
+            </a>
+
+
+            <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                title="Facebook">
+
+                <i class="fa-brands fa-facebook-f"></i>
+
+            </a>
+
+
+            <a
+                href="https://wa.me/"
+                target="_blank"
+                title="WhatsApp">
+
+                <i class="fa-brands fa-whatsapp"></i>
+
+            </a>
+
+
+            <a
+                href="https://www.instagram.com/"
+                target="_blank"
+                title="Instagram">
+
+                <i class="fa-brands fa-instagram"></i>
+
+            </a>
+
+
+        </div>
+
+
+        <p class="copyright">
+
+            © 2026 CodeNest.
+            All Rights Reserved.
+
+        </p>
+
+    </footer>
+
+
+    <!-- =========================================
+         LOGIN BACKDROP
+    ========================================= -->
+
+    <div
+        class="login-overlay"
+        id="loginOverlay"
+        onclick="closeLogin()">
+    </div>
+
+
+    <!-- =========================================
+         LOGIN PANEL
+    ========================================= -->
+
+    <div
+        class="login-panel"
+        id="loginPanel">
+
+
+        <!-- CLOSE -->
+
+        <button
+            class="close-login"
+            onclick="closeLogin()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <!-- LOGIN HEADER -->
+
+        <div class="login-header">
+
+
+            <div class="login-icon">
+
+                <i class="fa-solid fa-user-lock"></i>
+
+            </div>
+
+
+            <h2>
+                Welcome Back
+            </h2>
+
+
+            <p>
+                Login to continue
+            </p>
+
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="input-box">
+
+            <label>
+                Email
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <i class="fa-solid fa-envelope"></i>
+
+
+                <input
+                    type="email"
+                    placeholder="Enter your email">
+
+            </div>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="input-box">
+
+            <label>
+                Password
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <i class="fa-solid fa-lock"></i>
+
+
+                <input
+                    type="password"
+                    placeholder="Enter your password">
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <button
+            class="login-submit"
+            onclick="loginMessage()">
+
+            <i class="fa-solid fa-right-to-bracket"></i>
+
+            &nbsp; Login
+
+        </button>
+
+
+        <div class="login-bottom">
+
+            Don't have an account?
+
+            <span>
+                Sign Up
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================= -->
+
+    <script>
+
+
+        /* =========================================
+           LOGIN OPEN
+        ========================================= */
+
+        function openLogin() {
+
+            document
+                .getElementById("loginPanel")
+                .classList.add("active");
+
+
+            document
+                .getElementById("loginOverlay")
+                .classList.add("active");
+
+
+            document.body.style.overflow =
+                "hidden";
+        }
+
+
+        /* =========================================
+           LOGIN CLOSE
+        ========================================= */
+
+        function closeLogin() {
+
+            document
+                .getElementById("loginPanel")
+                .classList.remove("active");
+
+
+            document
+                .getElementById("loginOverlay")
+                .classList.remove("active");
+
+
+            document.body.style.overflow =
+                "auto";
+        }
+
+
+        /* =========================================
+           ESC KEY
+        ========================================= */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Escape") {
+
+                    closeLogin();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           DEMO LOGIN
+        ========================================= */
+
+        function loginMessage() {
+
+            alert(
+                "Login system is currently in demo mode."
+            );
+
+        }
+
+
+        /* =========================================
+           CUSTOM CURSOR
+        ========================================= */
+
+        const funCursor =
+            document.getElementById(
+                "funCursor"
+            );
+
+
+        document.addEventListener(
+            "mousemove",
+            function (event) {
+
+                funCursor.style.left =
+                    event.clientX + "px";
+
+                funCursor.style.top =
+                    event.clientY + "px";
+
+            }
+        );
+
+
+        /* CLICK */
+
+        document.addEventListener(
+            "mousedown",
+            function () {
+
+                funCursor.classList.add(
+                    "click"
+                );
+
+            }
+        );
+
+
+        document.addEventListener(
+            "mouseup",
+            function () {
+
+                funCursor.classList.remove(
+                    "click"
+                );
+
+            }
+        );
+
+
+        /* HOVER */
+
+        const interactiveElements =
+            document.querySelectorAll(
+                "a, button, .card"
+            );
+
+
+        interactiveElements.forEach(
+            function (element) {
+
+                element.addEventListener(
+                    "mouseenter",
+                    function () {
+
+                        funCursor.classList.add(
+                            "hover"
+                        );
+
+                    }
+                );
+
+
+                element.addEventListener(
+                    "mouseleave",
+                    function () {
+
+                        funCursor.classList.remove(
+                            "hover"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
